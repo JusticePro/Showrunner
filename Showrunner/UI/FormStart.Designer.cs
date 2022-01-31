@@ -56,6 +56,7 @@ namespace Showrunner.UI
             this.listBoxRecent.Name = "listBoxRecent";
             this.listBoxRecent.Size = new System.Drawing.Size(497, 355);
             this.listBoxRecent.TabIndex = 1;
+            this.listBoxRecent.DoubleClick += new System.EventHandler(this.listBoxRecent_DoubleClick);
             // 
             // buttonCreate
             // 

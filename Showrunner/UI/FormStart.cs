@@ -86,5 +86,32 @@ namespace Showrunner.UI
             formMain.Show();
             Visible = false;
         }
+
+        private void listBoxRecent_DoubleClick(object sender, EventArgs e)
+        {
+            // Check if an item is selected.
+            if (listBoxRecent.SelectedItem != null)
+            {
+                // Check if the item actually exists on the list.
+                if (listBoxRecent.Items.Contains(listBoxRecent.SelectedItem))
+                {
+                    // Get the path from the name.
+                    string path = paths[listBoxRecent.SelectedItem + ""];
+
+                    if (!File.Exists(path))
+                    {
+                        MessageBox.Show("That show doesn't exist.", "Showrunner");
+                        return;
+                    }
+
+                    // Open the show.
+                    Show show = Program.ReadFromBinaryFile<Show>(path);
+
+                    FormMain formMain = new FormMain(show);
+                    formMain.Show();
+                    Visible = false;
+                }
+            }
+        }
     }
 }
