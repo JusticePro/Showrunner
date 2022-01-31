@@ -15,12 +15,15 @@ namespace Showrunner.UI
         private Checkable checkable;
         private string name;
 
-        public ControlToDo(Checkable checkable, string name)
+        private Dictionary<string, ControlToDo> todoList;
+
+        public ControlToDo(Checkable checkable, string name, Dictionary<string, ControlToDo> todoList)
         {
             InitializeComponent();
 
             this.checkable = checkable;
             this.name = name;
+            this.todoList = todoList;
         }
 
         private void buttonAddItem_Click(object sender, EventArgs e)
@@ -108,6 +111,21 @@ namespace Showrunner.UI
 
             checkBoxList.Items.RemoveAt(index);
             checkBoxList.Items.Insert(index + 1, item);
+        }
+
+        private void buttonExit_Click(object sender, EventArgs e)
+        {
+            Dictionary<string, bool> values = new Dictionary<string, bool>();
+
+            foreach (string item in checkBoxList.Items)
+            {
+                values[item] = checkBoxList.GetItemChecked(checkBoxList.Items.IndexOf(item));
+            }
+
+            checkable.updateToDo(name, values);
+
+            Parent.Dispose();
+            todoList.Remove(name);
         }
     }
 }

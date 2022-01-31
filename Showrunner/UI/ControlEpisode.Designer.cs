@@ -29,6 +29,7 @@ namespace Showrunner.UI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.buttonExit = new System.Windows.Forms.Button();
             this.textBoxTitle = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -36,6 +37,8 @@ namespace Showrunner.UI
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.buttonDeleteNotepad = new System.Windows.Forms.Button();
             this.listBoxNotes = new System.Windows.Forms.ListBox();
+            this.notepadMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonCreateNotepad = new System.Windows.Forms.Button();
             this.textBoxNotepad = new System.Windows.Forms.TextBox();
             this.tabControlToDo = new System.Windows.Forms.TabControl();
@@ -44,14 +47,18 @@ namespace Showrunner.UI
             this.listBoxToDo = new System.Windows.Forms.ListBox();
             this.buttonCreateToDo = new System.Windows.Forms.Button();
             this.textBoxToDo = new System.Windows.Forms.TextBox();
+            this.todoMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.renameToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.tabControlNotes.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.notepadMenu.SuspendLayout();
             this.tabControlToDo.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.todoMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonExit
@@ -142,11 +149,27 @@ namespace Showrunner.UI
             this.listBoxNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.listBoxNotes.ContextMenuStrip = this.notepadMenu;
             this.listBoxNotes.FormattingEnabled = true;
             this.listBoxNotes.Location = new System.Drawing.Point(6, 32);
             this.listBoxNotes.Name = "listBoxNotes";
             this.listBoxNotes.Size = new System.Drawing.Size(465, 121);
             this.listBoxNotes.TabIndex = 2;
+            this.listBoxNotes.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxNotes_MouseDoubleClick);
+            // 
+            // notepadMenu
+            // 
+            this.notepadMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.renameToolStripMenuItem});
+            this.notepadMenu.Name = "notepadMenu";
+            this.notepadMenu.Size = new System.Drawing.Size(118, 26);
+            // 
+            // renameToolStripMenuItem
+            // 
+            this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
+            this.renameToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.renameToolStripMenuItem.Text = "Rename";
+            this.renameToolStripMenuItem.Click += new System.EventHandler(this.renameToolStripMenuItem_Click);
             // 
             // buttonCreateNotepad
             // 
@@ -208,11 +231,13 @@ namespace Showrunner.UI
             this.listBoxToDo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.listBoxToDo.ContextMenuStrip = this.todoMenu;
             this.listBoxToDo.FormattingEnabled = true;
             this.listBoxToDo.Location = new System.Drawing.Point(4, 33);
             this.listBoxToDo.Name = "listBoxToDo";
             this.listBoxToDo.Size = new System.Drawing.Size(469, 173);
             this.listBoxToDo.TabIndex = 6;
+            this.listBoxToDo.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxToDo_MouseDoubleClick);
             // 
             // buttonCreateToDo
             // 
@@ -233,6 +258,20 @@ namespace Showrunner.UI
             this.textBoxToDo.Size = new System.Drawing.Size(365, 20);
             this.textBoxToDo.TabIndex = 4;
             // 
+            // todoMenu
+            // 
+            this.todoMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.renameToolStripMenuItem1});
+            this.todoMenu.Name = "todoMenu";
+            this.todoMenu.Size = new System.Drawing.Size(181, 48);
+            // 
+            // renameToolStripMenuItem1
+            // 
+            this.renameToolStripMenuItem1.Name = "renameToolStripMenuItem1";
+            this.renameToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.renameToolStripMenuItem1.Text = "Rename";
+            this.renameToolStripMenuItem1.Click += new System.EventHandler(this.renameToolStripMenuItem1_Click);
+            // 
             // ControlEpisode
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -249,9 +288,11 @@ namespace Showrunner.UI
             this.tabControlNotes.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.notepadMenu.ResumeLayout(false);
             this.tabControlToDo.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.todoMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -273,5 +314,9 @@ namespace Showrunner.UI
         private System.Windows.Forms.ListBox listBoxToDo;
         private System.Windows.Forms.Button buttonCreateToDo;
         private System.Windows.Forms.TextBox textBoxToDo;
+        private System.Windows.Forms.ContextMenuStrip notepadMenu;
+        private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip todoMenu;
+        private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem1;
     }
 }

@@ -27,6 +27,8 @@ namespace Showrunner.UI
             InitializeComponent();
             instance = this;
 
+            Text = "Showrunner " + Program.version; // Display version.
+
             this.show = show;
 
             this.labelTitle.Text = show.title; // Set the title.
@@ -35,8 +37,9 @@ namespace Showrunner.UI
             // Add the notepads
             foreach (string notepad in show.notes.Keys)
             {
-                setupNotepad(notepad); // Setup the notepad.
-                notepads[notepad].textBox.Text = show.notes[notepad]; // Set the text in the notepad form.
+                listBoxNotes.Items.Add(notepad);
+                //setupNotepad(notepad); // Setup the notepad.
+                //notepads[notepad].textBox.Text = show.notes[notepad]; // Set the text in the notepad form.
             }
 
         }
@@ -121,9 +124,9 @@ namespace Showrunner.UI
          */
         public void setupNotepad(string name)
         {
-            listBoxNotes.Items.Add(name); // Add the notepad to the list to allow for it to be deleted.
+            // listBoxNotes.Items.Add(name); // Add the notepad to the list to allow for it to be deleted.
 
-            ControlNotepad c = new ControlNotepad(show, name);
+            ControlNotepad c = new ControlNotepad(show, name, notepads);
             notepads.Add(name, c); // Add the notepad control to the list.
 
             TabPage page = new TabPage(name);
@@ -133,6 +136,23 @@ namespace Showrunner.UI
             tabControlNotes.TabPages.Add(page);
             c.Size = page.Size;
             c.Dock = DockStyle.Fill;
+        }
+
+        /***
+         * Is notepad open.
+         */
+        public bool isNoteOpen(string notepad)
+        {
+            return notepads.ContainsKey(notepad);
+        }
+
+        /***
+         * Open Notepad
+         */
+        public void openNotepad(string notepad)
+        {
+            setupNotepad(notepad);
+            notepads[notepad].textBox.Text = show.notes[notepad];
         }
 
         /**
@@ -284,16 +304,30 @@ namespace Showrunner.UI
 
         private void FormMain_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.S && e.Modifiers == Keys.Control)
+            if (e.KeyCode == Keys.S && e.Control)
             {
                 save();
                 SystemSounds.Beep.Play();
+                e.Handled = true;
             }
         }
 
         private void tabControlTabs_KeyDown(object sender, KeyEventArgs e)
         {
 
+        }
+
+        private void listBoxNotes_DoubleClick(object sender, EventArgs e)
+        {
+            if (listBoxNotes.SelectedIndex != -1)
+            {
+                string notepad = listBoxNotes.SelectedItem + "";
+                if (isNoteOpen(notepad))
+                {
+                    return;
+                }
+                openNotepad(notepad);
+            }
         }
     }
 }

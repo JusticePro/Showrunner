@@ -14,18 +14,37 @@ namespace Showrunner.UI
     {
         private Noteable noteable;
         private string name;
+        private Dictionary<string, ControlNotepad> notepadList;
 
-        public ControlNotepad(Noteable noteable, string name)
+        public ControlNotepad(Noteable noteable, string name, Dictionary<string, ControlNotepad> notepadList)
         {
             InitializeComponent();
 
             this.noteable = noteable;
             this.name = name;
+            this.notepadList = notepadList;
         }
 
         private void textBox_Leave(object sender, EventArgs e)
         {
             noteable.updateNote(name, textBox.Text);
+        }
+
+        private void toolStripContainer1_TopToolStripPanel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            noteable.updateNote(name, textBox.Text);
+            Parent.Dispose();
+            notepadList.Remove(name);
+        }
+
+        private void boldToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

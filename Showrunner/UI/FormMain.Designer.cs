@@ -236,6 +236,7 @@ namespace Showrunner.UI
             this.listBoxNotes.Name = "listBoxNotes";
             this.listBoxNotes.Size = new System.Drawing.Size(461, 420);
             this.listBoxNotes.TabIndex = 2;
+            this.listBoxNotes.DoubleClick += new System.EventHandler(this.listBoxNotes_DoubleClick);
             // 
             // buttonCreateNotepad
             // 
@@ -264,6 +265,7 @@ namespace Showrunner.UI
             this.ClientSize = new System.Drawing.Size(760, 604);
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Name = "FormMain";
             this.Text = "Showrunner";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
