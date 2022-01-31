@@ -106,6 +106,7 @@ namespace Showrunner.UI
 
                     // Open the show.
                     Show show = Program.ReadFromBinaryFile<Show>(path);
+                    show.update();
 
                     FormMain formMain = new FormMain(show);
                     formMain.Show();

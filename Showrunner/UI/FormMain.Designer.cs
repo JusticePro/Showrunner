@@ -32,16 +32,17 @@ namespace Showrunner.UI
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.buttonAddEpisode = new System.Windows.Forms.Button();
             this.listBoxEpisodes = new System.Windows.Forms.ListBox();
             this.episodeContext = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelTitle = new System.Windows.Forms.Label();
             this.tabControlTabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.buttonExit = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
             this.tabControlNotes = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -68,6 +69,7 @@ namespace Showrunner.UI
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.comboBox1);
             this.splitContainer1.Panel1.Controls.Add(this.buttonAddEpisode);
             this.splitContainer1.Panel1.Controls.Add(this.listBoxEpisodes);
             this.splitContainer1.Panel1.Controls.Add(this.labelTitle);
@@ -79,11 +81,24 @@ namespace Showrunner.UI
             this.splitContainer1.SplitterDistance = 253;
             this.splitContainer1.TabIndex = 0;
             // 
+            // comboBox1
+            // 
+            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "No Template"});
+            this.comboBox1.Location = new System.Drawing.Point(12, 570);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(229, 21);
+            this.comboBox1.TabIndex = 3;
+            // 
             // buttonAddEpisode
             // 
             this.buttonAddEpisode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAddEpisode.Location = new System.Drawing.Point(12, 569);
+            this.buttonAddEpisode.Location = new System.Drawing.Point(12, 541);
             this.buttonAddEpisode.Name = "buttonAddEpisode";
             this.buttonAddEpisode.Size = new System.Drawing.Size(229, 23);
             this.buttonAddEpisode.TabIndex = 2;
@@ -100,7 +115,7 @@ namespace Showrunner.UI
             this.listBoxEpisodes.FormattingEnabled = true;
             this.listBoxEpisodes.Location = new System.Drawing.Point(12, 37);
             this.listBoxEpisodes.Name = "listBoxEpisodes";
-            this.listBoxEpisodes.Size = new System.Drawing.Size(229, 524);
+            this.listBoxEpisodes.Size = new System.Drawing.Size(229, 498);
             this.listBoxEpisodes.TabIndex = 1;
             this.listBoxEpisodes.DoubleClick += new System.EventHandler(this.listBoxEpisodes_DoubleClick);
             // 
@@ -109,30 +124,38 @@ namespace Showrunner.UI
             this.episodeContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.moveUpToolStripMenuItem,
             this.moveDownToolStripMenuItem,
-            this.deleteToolStripMenuItem});
+            this.deleteToolStripMenuItem,
+            this.createTemplateToolStripMenuItem});
             this.episodeContext.Name = "episodeContext";
-            this.episodeContext.Size = new System.Drawing.Size(139, 70);
+            this.episodeContext.Size = new System.Drawing.Size(160, 92);
             // 
             // moveUpToolStripMenuItem
             // 
             this.moveUpToolStripMenuItem.Name = "moveUpToolStripMenuItem";
-            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.moveUpToolStripMenuItem.Text = "Move Up";
             this.moveUpToolStripMenuItem.Click += new System.EventHandler(this.moveUpToolStripMenuItem_Click);
             // 
             // moveDownToolStripMenuItem
             // 
             this.moveDownToolStripMenuItem.Name = "moveDownToolStripMenuItem";
-            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.moveDownToolStripMenuItem.Text = "Move Down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.moveDownToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // createTemplateToolStripMenuItem
+            // 
+            this.createTemplateToolStripMenuItem.Name = "createTemplateToolStripMenuItem";
+            this.createTemplateToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.createTemplateToolStripMenuItem.Text = "Create Template";
+            this.createTemplateToolStripMenuItem.Click += new System.EventHandler(this.createTemplateToolStripMenuItem_Click);
             // 
             // labelTitle
             // 
@@ -156,7 +179,6 @@ namespace Showrunner.UI
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.buttonExit);
             this.tabPage1.Controls.Add(this.buttonSave);
             this.tabPage1.Controls.Add(this.tabControlNotes);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -166,16 +188,6 @@ namespace Showrunner.UI
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Show Details";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // buttonExit
-            // 
-            this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonExit.Location = new System.Drawing.Point(91, 547);
-            this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(96, 23);
-            this.buttonExit.TabIndex = 10;
-            this.buttonExit.Text = "Exit to Menu";
-            this.buttonExit.UseVisualStyleBackColor = true;
             // 
             // buttonSave
             // 
@@ -303,8 +315,9 @@ namespace Showrunner.UI
         private System.Windows.Forms.ToolStripMenuItem moveUpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveDownToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
-        private System.Windows.Forms.Button buttonExit;
         private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.ToolStripMenuItem createTemplateToolStripMenuItem;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 

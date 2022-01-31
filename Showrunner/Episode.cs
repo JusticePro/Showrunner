@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Showrunner
 {
     [Serializable]
-    public class Episode : Noteable, Checkable
+    public class Episode : Noteable, Checkable, ICloneable
     {
         public string title = "Untitled Episode";
         
@@ -148,5 +148,9 @@ namespace Showrunner
             return data.ToArray();
         }
 
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }

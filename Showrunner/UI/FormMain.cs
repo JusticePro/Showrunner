@@ -42,6 +42,12 @@ namespace Showrunner.UI
                 //notepads[notepad].textBox.Text = show.notes[notepad]; // Set the text in the notepad form.
             }
 
+            comboBox1.SelectedIndex = 0; // Select "No Template"
+
+            foreach (string templateName in show.templates.Keys)
+            {
+                comboBox1.Items.Add(templateName);
+            }
         }
 
         /***
@@ -97,6 +103,19 @@ namespace Showrunner.UI
         public Episode createEpisode()
         {
             Episode episode = new Episode();
+            show.episodes.Add(episode);
+            updateList();
+
+            return episode;
+        }
+
+        /***
+         * Create a new episode.
+         */
+        public Episode createEpisode(Episode template)
+        {
+            Episode episode = (Episode) template.Clone();
+            episode.title = "Untitled Episode";
             show.episodes.Add(episode);
             updateList();
 
@@ -165,7 +184,13 @@ namespace Showrunner.UI
 
         private void buttonAddEpisode_Click(object sender, EventArgs e)
         {
-            openEpisode(createEpisode());
+            if (comboBox1.SelectedIndex == 0)
+            {
+                openEpisode(createEpisode());
+            }else
+            {
+                openEpisode(createEpisode(show.templates[comboBox1.SelectedItem + ""]));
+            }
         }
 
         private void listBoxEpisodes_DoubleClick(object sender, EventArgs e)
@@ -328,6 +353,23 @@ namespace Showrunner.UI
                 }
                 openNotepad(notepad);
             }
+        }
+
+        private void createTemplateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listBoxEpisodes.SelectedIndex == -1)
+            {
+                MessageBox.Show("You must select an episode to turn into a template.", "Showrunner");
+                return;
+            }
+
+            FormPrompt prompt = new FormPrompt("Name for the template?");
+            if (prompt.ShowDialog() == DialogResult.OK)
+            {
+                show.templates.Add(prompt.textBox1.Text, show.episodes[listBoxEpisodes.SelectedIndex]);
+                comboBox1.Items.Add(prompt.textBox1.Text);
+            }
+
         }
     }
 }

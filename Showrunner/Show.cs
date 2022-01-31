@@ -15,6 +15,9 @@ namespace Showrunner
         public List<Episode> episodes = new List<Episode>();
 
         public Dictionary<string, string> notes = new Dictionary<string, string>(); // Title : Contents
+        public Dictionary<string, Episode> templates = new Dictionary<string, Episode>(); // Template name. Episode template.
+
+        public int versionID = Program.versionID; // Version ID of the show.
 
         public void updateNote(string name, string value)
         {
@@ -107,6 +110,15 @@ namespace Showrunner
             }
 
             return show;
+        }
+
+        public void update()
+        {
+            if (templates == null) // Templates
+            {
+                templates = new Dictionary<string, Episode>();
+            }
+            versionID = Program.versionID;
         }
 
         public void saveShow(string path)

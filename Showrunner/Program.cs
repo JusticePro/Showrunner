@@ -12,6 +12,7 @@ namespace Showrunner
     static class Program
     {
         public static string version = "1.0.1";
+        public static int versionID = 1;
 
         /// <summary>
         /// The main entry point for the application.
