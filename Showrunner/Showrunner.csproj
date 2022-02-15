@@ -133,9 +133,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Notes.txt" />
     <Content Include="Resources\Clipboard-2.ico" />
     <Content Include="Resources\Clipboard.png" />
     <Content Include="Resources\Clipboard_1.ico" />
+    <Content Include="Resources\times-circle-regular.png" />
+    <Content Include="Resources\times-circle-regular.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
