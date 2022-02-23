@@ -11,8 +11,8 @@ namespace Showrunner
 {
     class Updater
     {
-        private static string version = "1.1";
-        private static int versionID = 3;
+        private static string version = "1.1.1";
+        private static int versionID = 4;
         
         private static string updateDetailURL = "https://raw.githubusercontent.com/JusticePro/Showrunner/master/Showrunner/update_details.txt";
         private static string downloadPage = "https://github.com/JusticePro/Showrunner/releases";

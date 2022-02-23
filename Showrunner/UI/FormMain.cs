@@ -277,7 +277,7 @@ namespace Showrunner.UI
         {
             if (listBoxEpisodes.SelectedIndex != -1)
             {
-                Episode episode = show.episodes[listBoxEpisodes.SelectedIndex];
+                Episode episode = show.episodes[getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.Text)];
                 if (isEpisodeOpen(episode))
                 {
                     return;
@@ -309,7 +309,7 @@ namespace Showrunner.UI
 
         private void moveUpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int index = listBoxEpisodes.SelectedIndex;
+            int index = getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.Text);
 
             if (index == -1)
             {
@@ -330,7 +330,7 @@ namespace Showrunner.UI
 
         private void moveDownToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int index = listBoxEpisodes.SelectedIndex;
+            int index = getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.Text);
 
             if (index == -1)
             {
