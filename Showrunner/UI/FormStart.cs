@@ -22,7 +22,7 @@ namespace Showrunner.UI
         public FormStart()
         {
             InitializeComponent();
-            //Text = "Showrunner " + Program.version; // Display version.
+            Text = "Showrunner " + Program.version; // Display version.
 
             if (!Directory.Exists(showrunnerPath))
             {
