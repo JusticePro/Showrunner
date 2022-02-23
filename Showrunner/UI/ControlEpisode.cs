@@ -105,7 +105,14 @@ namespace Showrunner.UI
         public void openNotepad(string notepad)
         {
             setupNotepad(notepad);
-            notepads[notepad].textBox.Text = episode.notes[notepad];
+
+            if (episode.notes[notepad].StartsWith("{\\rtf")) // Check for RTF
+            {
+                notepads[notepad].textBox.Rtf = episode.notes[notepad];
+            }else
+            {
+                notepads[notepad].textBox.Text = episode.notes[notepad];
+            }
         }
 
         /***

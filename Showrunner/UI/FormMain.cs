@@ -173,7 +173,15 @@ namespace Showrunner.UI
         private void openNotepad(string notepad)
         {
             setupNotepad(notepad);
-            notepads[notepad].textBox.Text = show.notes[notepad];
+
+            if (show.notes[notepad].StartsWith("{\\rtf")) // Check for RTF
+            {
+                notepads[notepad].textBox.Rtf = show.notes[notepad];
+            }
+            else
+            {
+                notepads[notepad].textBox.Text = show.notes[notepad];
+            }
         }
 
         /**
@@ -183,14 +191,14 @@ namespace Showrunner.UI
         {
             foreach (ControlNotepad notepad in notepads.Values)
             {
-                notepad.updateNote();
+                notepad.save();
             }
 
             foreach (ControlEpisode episode in openControlEpisodes)
             {
                 foreach (ControlNotepad notepad in episode.notepads.Values)
                 {
-                    notepad.updateNote();
+                    notepad.save();
                 }
             }
 
