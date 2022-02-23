@@ -40,7 +40,6 @@ namespace Showrunner.UI
                 }
             }
 
-            Updater.checkForUpdate(); // Check for update and display a prompt.
         }
 
         private void buttonCreate_Click(object sender, EventArgs e)
@@ -131,6 +130,11 @@ namespace Showrunner.UI
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void FormStart_Shown(object sender, EventArgs e)
+        {
+            Updater.checkForUpdate(); // Check for update and display a prompt.
         }
     }
 }
