@@ -14,7 +14,8 @@ namespace Showrunner
         private static string version = "1.1.1";
         private static int versionID = 4;
         
-        private static string updateDetailURL = "https://raw.githubusercontent.com/JusticePro/Showrunner/master/Showrunner/update_details.txt";
+        private static string updateDetailURL =
+            "https://raw.githubusercontent.com/JusticePro/Showrunner/master/Showrunner/update_details.txt";
         private static string downloadPage = "https://github.com/JusticePro/Showrunner/releases";
 
         /***
@@ -37,8 +38,7 @@ namespace Showrunner
         {
             if (isUpdateAvailable())
             {
-                DialogResult result = MessageBox.Show("You have an update available. Would you like to go to the download page for "
-                    + getVersionName() + "?",
+                DialogResult result = MessageBox.Show("You have an update available. Would you like to go to the download page.",
                     "Showrunner", MessageBoxButtons.YesNo);
 
                 if (result == DialogResult.Yes)
