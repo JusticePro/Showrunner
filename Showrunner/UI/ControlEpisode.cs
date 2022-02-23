@@ -13,7 +13,7 @@ namespace Showrunner.UI
     public partial class ControlEpisode : UserControl
     {
         private Episode episode;
-        private Dictionary<string, ControlNotepad> notepads = new Dictionary<string, ControlNotepad>(); // Name : Notepad Control
+        public Dictionary<string, ControlNotepad> notepads = new Dictionary<string, ControlNotepad>(); // Name : Notepad Control
         private Dictionary<string, ControlToDo> todos = new Dictionary<string, ControlToDo>(); // Name : Notepad Control
 
         public ControlEpisode(Episode episode)
@@ -151,6 +151,7 @@ namespace Showrunner.UI
         {
             ((TabControl)Parent.Parent).Controls.RemoveAt(((TabControl)Parent.Parent).SelectedIndex); // Close this tab.
             FormMain.instance.openEpisodes.Remove(episode);
+            FormMain.instance.openControlEpisodes.Remove(this);
         }
 
         private void buttonCreateNotepad_Click(object sender, EventArgs e)

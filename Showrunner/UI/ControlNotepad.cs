@@ -25,6 +25,11 @@ namespace Showrunner.UI
             this.notepadList = notepadList;
         }
 
+        public void updateNote()
+        {
+            noteable.updateNote(name, textBox.Text);
+        }
+
         private void textBox_Leave(object sender, EventArgs e)
         {
             noteable.updateNote(name, textBox.Text);

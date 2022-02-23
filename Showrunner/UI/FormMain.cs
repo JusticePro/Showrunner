@@ -13,11 +13,12 @@ namespace Showrunner.UI
 {
     public partial class FormMain : Form
     {
-        public Show show;
+        private Show show;
         public static FormMain instance;
 
         public List<Episode> openEpisodes = new List<Episode>();
-        public Dictionary<string, ControlNotepad> notepads = new Dictionary<string, ControlNotepad>(); // Name : Notepad Control
+        public List<ControlEpisode> openControlEpisodes = new List<ControlEpisode>();
+        private Dictionary<string, ControlNotepad> notepads = new Dictionary<string, ControlNotepad>(); // Name : Notepad Control
 
         /***
          * Form Main
@@ -65,7 +66,7 @@ namespace Showrunner.UI
         /***
          * Creates a tab for an episode.
          */
-        public void openEpisode(Episode episode)
+        private void openEpisode(Episode episode)
         {
             ControlEpisode c = new ControlEpisode(episode);
             TabPage page = new TabPage(episode.title);
@@ -78,12 +79,13 @@ namespace Showrunner.UI
             c.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 
             openEpisodes.Add(episode); // Add the episode to the list of open episodes (to prevent duplicate tabs).
+            openControlEpisodes.Add(c);
         }
 
         /***
          * Delete an episode and remove it from the list and close any tabs of it.
          */
-        public void deleteEpisode(string name, int index)
+        private void deleteEpisode(string name, int index)
         {
             Episode episode = show.episodes[index];
 
@@ -100,7 +102,7 @@ namespace Showrunner.UI
         /***
          * Create a new episode.
          */
-        public Episode createEpisode()
+        private Episode createEpisode()
         {
             Episode episode = new Episode();
             show.episodes.Add(episode);
@@ -112,7 +114,7 @@ namespace Showrunner.UI
         /***
          * Create a new episode.
          */
-        public Episode createEpisode(Episode template)
+        private Episode createEpisode(Episode template)
         {
             Episode episode = (Episode) template.Clone();
             episode.title = "Untitled Episode";
@@ -125,7 +127,7 @@ namespace Showrunner.UI
         /***
          * Returns whether or not there is a tab with a specific episode open.
          */
-        public bool isEpisodeOpen(Episode episode)
+        private bool isEpisodeOpen(Episode episode)
         {
             foreach (Episode e in openEpisodes)
             {
@@ -141,7 +143,7 @@ namespace Showrunner.UI
         /***
          * Setup a notepad.
          */
-        public void setupNotepad(string name)
+        private void setupNotepad(string name)
         {
             // listBoxNotes.Items.Add(name); // Add the notepad to the list to allow for it to be deleted.
 
@@ -160,7 +162,7 @@ namespace Showrunner.UI
         /***
          * Is notepad open.
          */
-        public bool isNoteOpen(string notepad)
+        private bool isNoteOpen(string notepad)
         {
             return notepads.ContainsKey(notepad);
         }
@@ -168,7 +170,7 @@ namespace Showrunner.UI
         /***
          * Open Notepad
          */
-        public void openNotepad(string notepad)
+        private void openNotepad(string notepad)
         {
             setupNotepad(notepad);
             notepads[notepad].textBox.Text = show.notes[notepad];
@@ -177,8 +179,21 @@ namespace Showrunner.UI
         /**
          * Save the file
          */
-        public void save()
+        private void save()
         {
+            foreach (ControlNotepad notepad in notepads.Values)
+            {
+                notepad.updateNote();
+            }
+
+            foreach (ControlEpisode episode in openControlEpisodes)
+            {
+                foreach (ControlNotepad notepad in episode.notepads.Values)
+                {
+                    notepad.updateNote();
+                }
+            }
+
             Program.WriteToBinaryFile(FormStart.showrunnerPath + "/" + show.title + ".show", show);
         }
 
