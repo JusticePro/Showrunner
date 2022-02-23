@@ -13,11 +13,12 @@ namespace Showrunner.UI
 {
     public partial class FormMain : Form
     {
-        public Show show;
+        private Show show;
         public static FormMain instance;
 
         public List<Episode> openEpisodes = new List<Episode>();
-        public Dictionary<string, ControlNotepad> notepads = new Dictionary<string, ControlNotepad>(); // Name : Notepad Control
+        public List<ControlEpisode> openControlEpisodes = new List<ControlEpisode>();
+        private Dictionary<string, ControlNotepad> notepads = new Dictionary<string, ControlNotepad>(); // Name : Notepad Control
 
         /***
          * Form Main
@@ -30,6 +31,17 @@ namespace Showrunner.UI
             Text = "Showrunner " + Updater.getVersionName(); // Display version.
 
             this.show = show;
+
+            // Setup Season Box
+            seasonBox.SelectedIndex = 0;
+
+            foreach (Episode episode in show.episodes)
+            {
+                if (!seasonBox.Items.Contains(episode.season))
+                {
+                    addSeasonToList(episode.season);
+                }
+            }
 
             this.labelTitle.Text = show.title; // Set the title.
             updateList(); // Add the episodes.
@@ -48,6 +60,23 @@ namespace Showrunner.UI
             {
                 comboBox1.Items.Add(templateName);
             }
+
+        }
+
+        public void addSeasonToList(string name)
+        {
+            ToolStripMenuItem seasonTab = new ToolStripMenuItem(name);
+            seasonTab.Click += new EventHandler((Object o, EventArgs a) =>
+            {
+                if (listBoxEpisodes.SelectedItem != null)
+                {
+                    show.episodes[getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.SelectedItem + "")].season = name;
+                    updateList();
+                }
+            });
+
+            moveToSeasonToolStripMenuItem.DropDownItems.Add(seasonTab);
+            seasonBox.Items.Add(name);
         }
 
         /***
@@ -56,8 +85,14 @@ namespace Showrunner.UI
         public void updateList()
         {
             listBoxEpisodes.Items.Clear();
+
             foreach (Episode episode in show.episodes)
             {
+                if (!episode.season.Equals(seasonBox.Text))
+                {
+                    continue;
+                }
+
                 listBoxEpisodes.Items.Add(episode.title);
             }
         }
@@ -65,7 +100,7 @@ namespace Showrunner.UI
         /***
          * Creates a tab for an episode.
          */
-        public void openEpisode(Episode episode)
+        private void openEpisode(Episode episode)
         {
             ControlEpisode c = new ControlEpisode(episode);
             TabPage page = new TabPage(episode.title);
@@ -78,12 +113,13 @@ namespace Showrunner.UI
             c.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 
             openEpisodes.Add(episode); // Add the episode to the list of open episodes (to prevent duplicate tabs).
+            openControlEpisodes.Add(c);
         }
 
         /***
          * Delete an episode and remove it from the list and close any tabs of it.
          */
-        public void deleteEpisode(string name, int index)
+        private void deleteEpisode(string name, int index)
         {
             Episode episode = show.episodes[index];
 
@@ -100,7 +136,7 @@ namespace Showrunner.UI
         /***
          * Create a new episode.
          */
-        public Episode createEpisode()
+        private Episode createEpisode()
         {
             Episode episode = new Episode();
             show.episodes.Add(episode);
@@ -112,7 +148,7 @@ namespace Showrunner.UI
         /***
          * Create a new episode.
          */
-        public Episode createEpisode(Episode template)
+        private Episode createEpisode(Episode template)
         {
             Episode episode = (Episode) template.Clone();
             episode.title = "Untitled Episode";
@@ -125,7 +161,7 @@ namespace Showrunner.UI
         /***
          * Returns whether or not there is a tab with a specific episode open.
          */
-        public bool isEpisodeOpen(Episode episode)
+        private bool isEpisodeOpen(Episode episode)
         {
             foreach (Episode e in openEpisodes)
             {
@@ -141,7 +177,7 @@ namespace Showrunner.UI
         /***
          * Setup a notepad.
          */
-        public void setupNotepad(string name)
+        private void setupNotepad(string name)
         {
             // listBoxNotes.Items.Add(name); // Add the notepad to the list to allow for it to be deleted.
 
@@ -160,7 +196,7 @@ namespace Showrunner.UI
         /***
          * Is notepad open.
          */
-        public bool isNoteOpen(string notepad)
+        private bool isNoteOpen(string notepad)
         {
             return notepads.ContainsKey(notepad);
         }
@@ -168,18 +204,62 @@ namespace Showrunner.UI
         /***
          * Open Notepad
          */
-        public void openNotepad(string notepad)
+        private void openNotepad(string notepad)
         {
             setupNotepad(notepad);
-            notepads[notepad].textBox.Text = show.notes[notepad];
+
+            if (show.notes[notepad].StartsWith("{\\rtf")) // Check for RTF
+            {
+                notepads[notepad].textBox.Rtf = show.notes[notepad];
+            }
+            else
+            {
+                notepads[notepad].textBox.Text = show.notes[notepad];
+            }
         }
 
         /**
          * Save the file
          */
-        public void save()
+        private void save()
         {
+            foreach (ControlNotepad notepad in notepads.Values)
+            {
+                notepad.save();
+            }
+
+            foreach (ControlEpisode episode in openControlEpisodes)
+            {
+                foreach (ControlNotepad notepad in episode.notepads.Values)
+                {
+                    notepad.save();
+                }
+            }
+
             Program.WriteToBinaryFile(FormStart.showrunnerPath + "/" + show.title + ".show", show);
+        }
+
+        public int getEpisodeIndex(int listIndex, string season)
+        {
+            int i = 0;
+            int li = 0;
+
+            foreach (Episode episode in show.episodes)
+            {
+                if (episode.season.Equals(season))
+                {
+                    if (li == listIndex)
+                    {
+                        return i + li;
+                    }
+                    li++;
+                }else
+                {
+                    i++;
+                }
+            }
+
+            return -1;
         }
 
         private void buttonAddEpisode_Click(object sender, EventArgs e)
@@ -370,6 +450,37 @@ namespace Showrunner.UI
                 comboBox1.Items.Add(prompt.textBox1.Text);
             }
 
+        }
+
+        private void seasonBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateList();
+        }
+
+        private void defaultSeasonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listBoxEpisodes.SelectedItem != null)
+            {
+                show.episodes[getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.SelectedItem + "")].season = "Default Season";
+                updateList();
+            }
+        }
+
+        private void createNewSeasonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormPrompt prompt = new FormPrompt("Season name?");
+            
+            if (prompt.ShowDialog() == DialogResult.OK)
+            {
+                addSeasonToList(prompt.textBox1.Text);
+
+                if (listBoxEpisodes.SelectedItem != null)
+                {
+                    show.episodes[getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.SelectedItem + "")].season
+                        = prompt.textBox1.Text;
+                    updateList();
+                }
+            }
         }
     }
 }

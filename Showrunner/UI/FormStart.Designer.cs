@@ -102,6 +102,7 @@ namespace Showrunner.UI
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormStart";
             this.Text = "Showrunner";
+            this.Shown += new System.EventHandler(this.FormStart_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
