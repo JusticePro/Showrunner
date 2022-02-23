@@ -118,6 +118,16 @@ namespace Showrunner
             {
                 templates = new Dictionary<string, Episode>();
             }
+
+            foreach (Episode episode in episodes)
+            {
+                // Update season if there isn't one.
+                if (episode.season == null)
+                {
+                    episode.season = "Default Season";
+                }
+            }
+
             versionID = Updater.getVersionID();
         }
 

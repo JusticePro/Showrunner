@@ -32,6 +32,17 @@ namespace Showrunner.UI
 
             this.show = show;
 
+            // Setup Season Box
+            seasonBox.SelectedIndex = 0;
+
+            foreach (Episode episode in show.episodes)
+            {
+                if (!seasonBox.Items.Contains(episode.season))
+                {
+                    addSeasonToList(episode.season);
+                }
+            }
+
             this.labelTitle.Text = show.title; // Set the title.
             updateList(); // Add the episodes.
 
@@ -49,6 +60,23 @@ namespace Showrunner.UI
             {
                 comboBox1.Items.Add(templateName);
             }
+
+        }
+
+        public void addSeasonToList(string name)
+        {
+            ToolStripMenuItem seasonTab = new ToolStripMenuItem(name);
+            seasonTab.Click += new EventHandler((Object o, EventArgs a) =>
+            {
+                if (listBoxEpisodes.SelectedItem != null)
+                {
+                    show.episodes[getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.SelectedItem + "")].season = name;
+                    updateList();
+                }
+            });
+
+            moveToSeasonToolStripMenuItem.DropDownItems.Add(seasonTab);
+            seasonBox.Items.Add(name);
         }
 
         /***
@@ -57,8 +85,14 @@ namespace Showrunner.UI
         public void updateList()
         {
             listBoxEpisodes.Items.Clear();
+
             foreach (Episode episode in show.episodes)
             {
+                if (!episode.season.Equals(seasonBox.Text))
+                {
+                    continue;
+                }
+
                 listBoxEpisodes.Items.Add(episode.title);
             }
         }
@@ -203,6 +237,29 @@ namespace Showrunner.UI
             }
 
             Program.WriteToBinaryFile(FormStart.showrunnerPath + "/" + show.title + ".show", show);
+        }
+
+        public int getEpisodeIndex(int listIndex, string season)
+        {
+            int i = 0;
+            int li = 0;
+
+            foreach (Episode episode in show.episodes)
+            {
+                if (episode.season.Equals(season))
+                {
+                    if (li == listIndex)
+                    {
+                        return i + li;
+                    }
+                    li++;
+                }else
+                {
+                    i++;
+                }
+            }
+
+            return -1;
         }
 
         private void buttonAddEpisode_Click(object sender, EventArgs e)
@@ -393,6 +450,37 @@ namespace Showrunner.UI
                 comboBox1.Items.Add(prompt.textBox1.Text);
             }
 
+        }
+
+        private void seasonBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateList();
+        }
+
+        private void defaultSeasonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listBoxEpisodes.SelectedItem != null)
+            {
+                show.episodes[getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.SelectedItem + "")].season = "Default Season";
+                updateList();
+            }
+        }
+
+        private void createNewSeasonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormPrompt prompt = new FormPrompt("Season name?");
+            
+            if (prompt.ShowDialog() == DialogResult.OK)
+            {
+                addSeasonToList(prompt.textBox1.Text);
+
+                if (listBoxEpisodes.SelectedItem != null)
+                {
+                    show.episodes[getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.SelectedItem + "")].season
+                        = prompt.textBox1.Text;
+                    updateList();
+                }
+            }
         }
     }
 }
