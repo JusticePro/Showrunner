@@ -27,7 +27,7 @@ namespace Showrunner.UI
             InitializeComponent();
             instance = this;
 
-            Text = "Showrunner " + Program.version; // Display version.
+            Text = "Showrunner " + Updater.getVersionName(); // Display version.
 
             this.show = show;
 

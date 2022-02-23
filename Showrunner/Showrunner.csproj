@@ -91,6 +91,7 @@
     <Compile Include="UI\FormStart.Designer.cs">
       <DependentUpon>FormStart.cs</DependentUpon>
     </Compile>
+    <Compile Include="Updater.cs" />
     <EmbeddedResource Include="UI\ControlEpisode.resx">
       <DependentUpon>ControlEpisode.cs</DependentUpon>
     </EmbeddedResource>
@@ -139,6 +140,7 @@
     <Content Include="Resources\Clipboard_1.ico" />
     <Content Include="Resources\times-circle-regular.png" />
     <Content Include="Resources\times-circle-regular.svg" />
+    <Content Include="update_details.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -22,7 +22,7 @@ namespace Showrunner.UI
         public FormStart()
         {
             InitializeComponent();
-            Text = "Showrunner " + Program.version; // Display version.
+            Text = "Showrunner " + Updater.getVersionName(); // Display version.
 
             if (!Directory.Exists(showrunnerPath))
             {
@@ -39,6 +39,8 @@ namespace Showrunner.UI
                     paths[f[f.Length - 1]] = file;
                 }
             }
+
+            Updater.checkForUpdate(); // Check for update and display a prompt.
         }
 
         private void buttonCreate_Click(object sender, EventArgs e)
