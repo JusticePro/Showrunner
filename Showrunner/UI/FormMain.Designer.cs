@@ -32,6 +32,7 @@ namespace Showrunner.UI
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.seasonBox = new System.Windows.Forms.ComboBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.buttonAddEpisode = new System.Windows.Forms.Button();
             this.listBoxEpisodes = new System.Windows.Forms.ListBox();
@@ -42,6 +43,7 @@ namespace Showrunner.UI
             this.createTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveToSeasonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createNewSeasonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.defaultSeasonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelTitle = new System.Windows.Forms.Label();
             this.tabControlTabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -52,8 +54,6 @@ namespace Showrunner.UI
             this.listBoxNotes = new System.Windows.Forms.ListBox();
             this.buttonCreateNotepad = new System.Windows.Forms.Button();
             this.textBoxNotepad = new System.Windows.Forms.TextBox();
-            this.seasonBox = new System.Windows.Forms.ComboBox();
-            this.defaultSeasonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -85,6 +85,20 @@ namespace Showrunner.UI
             this.splitContainer1.Size = new System.Drawing.Size(760, 604);
             this.splitContainer1.SplitterDistance = 253;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // seasonBox
+            // 
+            this.seasonBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.seasonBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.seasonBox.FormattingEnabled = true;
+            this.seasonBox.Items.AddRange(new object[] {
+            "Default Season"});
+            this.seasonBox.Location = new System.Drawing.Point(12, 37);
+            this.seasonBox.Name = "seasonBox";
+            this.seasonBox.Size = new System.Drawing.Size(229, 21);
+            this.seasonBox.TabIndex = 4;
+            this.seasonBox.SelectedIndexChanged += new System.EventHandler(this.seasonBox_SelectedIndexChanged);
             // 
             // comboBox1
             // 
@@ -133,33 +147,33 @@ namespace Showrunner.UI
             this.createTemplateToolStripMenuItem,
             this.moveToSeasonToolStripMenuItem});
             this.episodeContext.Name = "episodeContext";
-            this.episodeContext.Size = new System.Drawing.Size(181, 136);
+            this.episodeContext.Size = new System.Drawing.Size(160, 114);
             // 
             // moveUpToolStripMenuItem
             // 
             this.moveUpToolStripMenuItem.Name = "moveUpToolStripMenuItem";
-            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.moveUpToolStripMenuItem.Text = "Move Up";
             this.moveUpToolStripMenuItem.Click += new System.EventHandler(this.moveUpToolStripMenuItem_Click);
             // 
             // moveDownToolStripMenuItem
             // 
             this.moveDownToolStripMenuItem.Name = "moveDownToolStripMenuItem";
-            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.moveDownToolStripMenuItem.Text = "Move Down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.moveDownToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // createTemplateToolStripMenuItem
             // 
             this.createTemplateToolStripMenuItem.Name = "createTemplateToolStripMenuItem";
-            this.createTemplateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createTemplateToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.createTemplateToolStripMenuItem.Text = "Create Template";
             this.createTemplateToolStripMenuItem.Click += new System.EventHandler(this.createTemplateToolStripMenuItem_Click);
             // 
@@ -169,15 +183,22 @@ namespace Showrunner.UI
             this.createNewSeasonToolStripMenuItem,
             this.defaultSeasonToolStripMenuItem});
             this.moveToSeasonToolStripMenuItem.Name = "moveToSeasonToolStripMenuItem";
-            this.moveToSeasonToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.moveToSeasonToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.moveToSeasonToolStripMenuItem.Text = "Move to Season";
             // 
             // createNewSeasonToolStripMenuItem
             // 
             this.createNewSeasonToolStripMenuItem.Name = "createNewSeasonToolStripMenuItem";
-            this.createNewSeasonToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createNewSeasonToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.createNewSeasonToolStripMenuItem.Text = "Create New Season";
             this.createNewSeasonToolStripMenuItem.Click += new System.EventHandler(this.createNewSeasonToolStripMenuItem_Click);
+            // 
+            // defaultSeasonToolStripMenuItem
+            // 
+            this.defaultSeasonToolStripMenuItem.Name = "defaultSeasonToolStripMenuItem";
+            this.defaultSeasonToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.defaultSeasonToolStripMenuItem.Text = "Default Season";
+            this.defaultSeasonToolStripMenuItem.Click += new System.EventHandler(this.defaultSeasonToolStripMenuItem_Click);
             // 
             // labelTitle
             // 
@@ -290,27 +311,6 @@ namespace Showrunner.UI
             this.textBoxNotepad.Name = "textBoxNotepad";
             this.textBoxNotepad.Size = new System.Drawing.Size(364, 20);
             this.textBoxNotepad.TabIndex = 0;
-            // 
-            // seasonBox
-            // 
-            this.seasonBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.seasonBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.seasonBox.FormattingEnabled = true;
-            this.seasonBox.Items.AddRange(new object[] {
-            "Default Season"});
-            this.seasonBox.Location = new System.Drawing.Point(12, 37);
-            this.seasonBox.Name = "seasonBox";
-            this.seasonBox.Size = new System.Drawing.Size(229, 21);
-            this.seasonBox.TabIndex = 4;
-            this.seasonBox.SelectedIndexChanged += new System.EventHandler(this.seasonBox_SelectedIndexChanged);
-            // 
-            // defaultSeasonToolStripMenuItem
-            // 
-            this.defaultSeasonToolStripMenuItem.Name = "defaultSeasonToolStripMenuItem";
-            this.defaultSeasonToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.defaultSeasonToolStripMenuItem.Text = "Default Season";
-            this.defaultSeasonToolStripMenuItem.Click += new System.EventHandler(this.defaultSeasonToolStripMenuItem_Click);
             // 
             // FormMain
             // 
