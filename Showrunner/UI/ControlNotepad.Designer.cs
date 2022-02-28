@@ -48,6 +48,7 @@ namespace Showrunner.UI
             this.textBox.Size = new System.Drawing.Size(289, 200);
             this.textBox.TabIndex = 2;
             this.textBox.Text = "";
+            this.textBox.SelectionChanged += new System.EventHandler(this.textBox_SelectionChanged);
             this.textBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyDown);
             // 
             // menuStrip1

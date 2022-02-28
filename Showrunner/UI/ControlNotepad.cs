@@ -25,6 +25,45 @@ namespace Showrunner.UI
             this.notepadList = notepadList;
         }
 
+        private void updateButtons()
+        {
+            if (textBox.SelectionFont.Bold)
+            {
+                boldToolStripMenuItem.Font = new Font(boldToolStripMenuItem.Font, FontStyle.Bold);
+            }
+            else
+            {
+                boldToolStripMenuItem.Font = new Font(boldToolStripMenuItem.Font, FontStyle.Regular);
+            }
+
+            if (textBox.SelectionFont.Italic)
+            {
+                italicsToolStripMenuItem.Font = new Font(boldToolStripMenuItem.Font, FontStyle.Bold);
+            }
+            else
+            {
+                italicsToolStripMenuItem.Font = new Font(boldToolStripMenuItem.Font, FontStyle.Regular);
+            }
+
+            if (textBox.SelectionFont.Underline)
+            {
+                underlineToolStripMenuItem.Font = new Font(boldToolStripMenuItem.Font, FontStyle.Bold);
+            }
+            else
+            {
+                underlineToolStripMenuItem.Font = new Font(boldToolStripMenuItem.Font, FontStyle.Regular);
+            }
+
+            if (textBox.SelectionFont.Strikeout)
+            {
+                strikeMenuItem.Font = new Font(boldToolStripMenuItem.Font, FontStyle.Bold);
+            }
+            else
+            {
+                strikeMenuItem.Font = new Font(boldToolStripMenuItem.Font, FontStyle.Regular);
+            }
+        }
+
         public void save()
         {
             noteable.updateNote(name, textBox.Rtf);
@@ -61,6 +100,7 @@ namespace Showrunner.UI
         {
             toggleStyle(FontStyle.Strikeout);
         }
+
 
         private void toggleStyle(FontStyle style)
         {
@@ -101,7 +141,13 @@ namespace Showrunner.UI
                     toggleStyle(FontStyle.Strikeout);
                     e.SuppressKeyPress = true;
                 }
+                updateButtons();
             }
+        }
+
+        private void textBox_SelectionChanged(object sender, EventArgs e)
+        {
+            updateButtons();
         }
     }
 }
