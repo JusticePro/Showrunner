@@ -121,7 +121,7 @@ namespace Showrunner.UI
         public void openTodo(string todo)
         {
             setupToDo(todo);
-            foreach (string item in episode.getToDoList())
+            foreach (string item in episode.getToDo(todo).Keys)
             {
                 CheckedListBox list = todos[todo].checkBoxList;
                 int index = list.Items.Add(item); // Set the to do list to equal the correct data.
