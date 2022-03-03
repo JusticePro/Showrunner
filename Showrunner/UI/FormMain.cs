@@ -37,9 +37,9 @@ namespace Showrunner.UI
 
             foreach (Episode episode in show.episodes)
             {
-                if (!seasonBox.Items.Contains(episode.season))
+                if (!seasonBox.Items.Contains(episode.getSeason()))
                 {
-                    addSeasonToList(episode.season);
+                    addSeasonToList(episode.getSeason());
                 }
             }
 
@@ -70,7 +70,7 @@ namespace Showrunner.UI
             {
                 if (listBoxEpisodes.SelectedItem != null)
                 {
-                    show.episodes[getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.SelectedItem + "")].season = name;
+                    show.episodes[getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.SelectedItem + "")].setSeason(name);
                     updateList();
                 }
             });
@@ -88,12 +88,12 @@ namespace Showrunner.UI
 
             foreach (Episode episode in show.episodes)
             {
-                if (!episode.season.Equals(seasonBox.Text))
+                if (!episode.getSeason().Equals(seasonBox.Text))
                 {
                     continue;
                 }
 
-                listBoxEpisodes.Items.Add(episode.title);
+                listBoxEpisodes.Items.Add(episode.getTitle());
             }
         }
 
@@ -103,7 +103,7 @@ namespace Showrunner.UI
         private void openEpisode(Episode episode)
         {
             ControlEpisode c = new ControlEpisode(episode);
-            TabPage page = new TabPage(episode.title);
+            TabPage page = new TabPage(episode.getTitle());
             page.BackColor = Color.White;
             page.Controls.Add(c);
 
@@ -151,7 +151,7 @@ namespace Showrunner.UI
         private Episode createEpisode(Episode template)
         {
             Episode episode = (Episode) template.Clone();
-            episode.title = "Untitled Episode";
+            episode.setTitle("Untitled Episode");
             show.episodes.Add(episode);
             updateList();
 
@@ -246,7 +246,7 @@ namespace Showrunner.UI
 
             foreach (Episode episode in show.episodes)
             {
-                if (episode.season.Equals(season))
+                if (episode.getSeason().Equals(season))
                 {
                     if (li == listIndex)
                     {
@@ -461,7 +461,7 @@ namespace Showrunner.UI
         {
             if (listBoxEpisodes.SelectedItem != null)
             {
-                show.episodes[getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.SelectedItem + "")].season = "Default Season";
+                show.episodes[getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.SelectedItem + "")].setSeason("Default Season");
                 updateList();
             }
         }
@@ -476,8 +476,7 @@ namespace Showrunner.UI
 
                 if (listBoxEpisodes.SelectedItem != null)
                 {
-                    show.episodes[getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.SelectedItem + "")].season
-                        = prompt.textBox1.Text;
+                    show.episodes[getEpisodeIndex(listBoxEpisodes.SelectedIndex, seasonBox.SelectedItem + "")].setSeason(prompt.textBox1.Text);
                     updateList();
                 }
             }

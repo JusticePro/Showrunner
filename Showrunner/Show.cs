@@ -34,9 +34,9 @@ namespace Showrunner
             foreach (Episode episode in episodes)
             {
                 // Update season if there isn't one.
-                if (episode.season == null)
+                if (episode.getSeason() == null)
                 {
-                    episode.season = "Default Season";
+                    episode.setSeason("Default Season");
                 }
             }
 
