@@ -42,5 +42,5 @@ namespace Showrunner
 
             versionID = Updater.getVersionID();
         }
-
+    }
 }
