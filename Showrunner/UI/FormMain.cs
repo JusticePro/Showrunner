@@ -44,15 +44,13 @@ namespace Showrunner.UI
             }
 
             this.labelTitle.Text = show.getTitle(); // Set the title.
+
             updateList(); // Add the episodes.
 
             // Add the notepads
-            foreach (string notepad in show.getNotes())
-            {
-                listBoxNotes.Items.Add(notepad);
-                //setupNotepad(notepad); // Setup the notepad.
-                //notepads[notepad].textBox.Text = show.notes[notepad]; // Set the text in the notepad form.
-            }
+            updateNotepads();
+            updateFolderContext();
+            updateFolders();
 
             comboBox1.SelectedIndex = 0; // Select "No Template"
 
@@ -191,6 +189,7 @@ namespace Showrunner.UI
             tabControlNotes.TabPages.Add(page);
             c.Size = page.Size;
             c.Dock = DockStyle.Fill;
+
         }
 
         /***
@@ -262,6 +261,69 @@ namespace Showrunner.UI
             return -1;
         }
 
+        public void updateNotepads()
+        {
+            updateNotepads(null);
+        }
+
+        public void updateNotepads(string folder)
+        {
+            listBoxNotes.Items.Clear();
+
+            string[] array = show.getNotes();
+
+            if (folder != null)
+            {
+                array = show.getNotesInFolder(folder);
+            }
+
+            foreach (string notepad in array)
+            {
+                listBoxNotes.Items.Add(notepad);
+                //setupNotepad(notepad); // Setup the notepad.
+                //notepads[notepad].textBox.Text = show.notes[notepad]; // Set the text in the notepad form.
+            }
+        }
+
+        public void updateFolderContext()
+        {
+            // Clear all but the first item.
+            for (int i = 1; i < folderContext.Items.Count; i++)
+            {
+                folderContext.Items.RemoveAt(i);
+            }
+
+            foreach (string folder in show.getFolders())
+            {
+                ToolStripMenuItem item = new ToolStripMenuItem(folder);
+
+                item.Click += new EventHandler((object sender, EventArgs e) =>
+                {
+                    if (listBoxNotes.SelectedIndex == -1)
+                    {
+                        MessageBox.Show("You need to select a note.");
+                        return;
+                    }
+                    show.addToFolder(listBoxNotes.SelectedItem + "", folder);
+                });
+
+                folderContext.Items.Add(item);
+            }
+        }
+
+        public void updateFolders()
+        {
+            noteFolderBox.Items.Clear();
+            noteFolderBox.Items.Add("No Folder");
+
+            foreach (string folder in show.getFolders())
+            {
+                noteFolderBox.Items.Add(folder);
+            }
+            noteFolderBox.SelectedIndex = 0;
+        }
+
+
         private void buttonAddEpisode_Click(object sender, EventArgs e)
         {
             if (comboBox1.SelectedIndex == 0)
@@ -306,6 +368,7 @@ namespace Showrunner.UI
 
             show.updateNote(notepadName, ""); // Create notepad
             setupNotepad(notepadName); // Create a new notepad.
+            updateNotepads();
         }
 
         private void moveUpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -477,6 +540,62 @@ namespace Showrunner.UI
                     updateList();
                 }
             }
+        }
+
+        private void noteFolderBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (noteFolderBox.SelectedItem.Equals("No Folder") || noteFolderBox.SelectedItem == null)
+            {
+                updateNotepads();
+                buttonRemoveFromFolder.Enabled = false;
+                return;
+            }
+
+            buttonRemoveFromFolder.Enabled = true;
+            updateNotepads(noteFolderBox.SelectedItem + "");
+        }
+
+        private void addToNewFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listBoxNotes.SelectedIndex == -1)
+            {
+                MessageBox.Show("You need to select a note.");
+                return;
+            }
+            FormPrompt prompt = new FormPrompt("Folder name?");
+
+            if (prompt.ShowDialog() == DialogResult.OK)
+            {
+                show.addToFolder(listBoxNotes.SelectedItem + "", prompt.textBox1.Text);
+                updateFolders();
+                updateFolderContext();
+            }
+        }
+
+        private void buttonRemoveFromFolder_Click(object sender, EventArgs e)
+        {
+            if (noteFolderBox.SelectedItem.Equals("No Folder") || noteFolderBox.SelectedItem == null)
+            {
+                return;
+            }
+
+            if (listBoxNotes.SelectedIndex == -1)
+            {
+                MessageBox.Show("You need to select a note.");
+                return;
+            }
+
+            show.removeFromFolder(listBoxNotes.SelectedItem + "", noteFolderBox.SelectedItem + "");
+            
+            if (show.getNotesInFolder(noteFolderBox.SelectedItem + "").Length == 0)
+            {
+                updateFolderContext();
+                updateFolders();
+            }else
+            {
+                listBoxNotes.Items.RemoveAt(listBoxNotes.SelectedIndex);
+            }
+
         }
     }
 }

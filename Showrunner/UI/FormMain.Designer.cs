@@ -50,10 +50,14 @@ namespace Showrunner.UI
             this.buttonSave = new System.Windows.Forms.Button();
             this.tabControlNotes = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.noteFolderBox = new System.Windows.Forms.ComboBox();
             this.buttonDeleteNotepad = new System.Windows.Forms.Button();
             this.listBoxNotes = new System.Windows.Forms.ListBox();
             this.buttonCreateNotepad = new System.Windows.Forms.Button();
             this.textBoxNotepad = new System.Windows.Forms.TextBox();
+            this.folderContext = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addToNewFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonRemoveFromFolder = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -63,6 +67,7 @@ namespace Showrunner.UI
             this.tabPage1.SuspendLayout();
             this.tabControlNotes.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.folderContext.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -189,14 +194,14 @@ namespace Showrunner.UI
             // createNewSeasonToolStripMenuItem
             // 
             this.createNewSeasonToolStripMenuItem.Name = "createNewSeasonToolStripMenuItem";
-            this.createNewSeasonToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.createNewSeasonToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createNewSeasonToolStripMenuItem.Text = "Create New Season";
             this.createNewSeasonToolStripMenuItem.Click += new System.EventHandler(this.createNewSeasonToolStripMenuItem_Click);
             // 
             // defaultSeasonToolStripMenuItem
             // 
             this.defaultSeasonToolStripMenuItem.Name = "defaultSeasonToolStripMenuItem";
-            this.defaultSeasonToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.defaultSeasonToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.defaultSeasonToolStripMenuItem.Text = "Default Season";
             this.defaultSeasonToolStripMenuItem.Click += new System.EventHandler(this.defaultSeasonToolStripMenuItem_Click);
             // 
@@ -257,6 +262,8 @@ namespace Showrunner.UI
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.buttonRemoveFromFolder);
+            this.tabPage4.Controls.Add(this.noteFolderBox);
             this.tabPage4.Controls.Add(this.buttonDeleteNotepad);
             this.tabPage4.Controls.Add(this.listBoxNotes);
             this.tabPage4.Controls.Add(this.buttonCreateNotepad);
@@ -269,13 +276,26 @@ namespace Showrunner.UI
             this.tabPage4.Text = "Notes Settings";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // noteFolderBox
+            // 
+            this.noteFolderBox.BackColor = System.Drawing.SystemColors.Window;
+            this.noteFolderBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.noteFolderBox.FormattingEnabled = true;
+            this.noteFolderBox.Items.AddRange(new object[] {
+            "No Folder"});
+            this.noteFolderBox.Location = new System.Drawing.Point(6, 451);
+            this.noteFolderBox.Name = "noteFolderBox";
+            this.noteFolderBox.Size = new System.Drawing.Size(461, 21);
+            this.noteFolderBox.TabIndex = 4;
+            this.noteFolderBox.SelectedIndexChanged += new System.EventHandler(this.noteFolderBox_SelectedIndexChanged);
+            // 
             // buttonDeleteNotepad
             // 
             this.buttonDeleteNotepad.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonDeleteNotepad.Location = new System.Drawing.Point(6, 478);
             this.buttonDeleteNotepad.Name = "buttonDeleteNotepad";
-            this.buttonDeleteNotepad.Size = new System.Drawing.Size(461, 23);
+            this.buttonDeleteNotepad.Size = new System.Drawing.Size(223, 23);
             this.buttonDeleteNotepad.TabIndex = 3;
             this.buttonDeleteNotepad.Text = "Delete Notepad";
             this.buttonDeleteNotepad.UseVisualStyleBackColor = true;
@@ -286,10 +306,11 @@ namespace Showrunner.UI
             this.listBoxNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.listBoxNotes.ContextMenuStrip = this.folderContext;
             this.listBoxNotes.FormattingEnabled = true;
             this.listBoxNotes.Location = new System.Drawing.Point(6, 32);
             this.listBoxNotes.Name = "listBoxNotes";
-            this.listBoxNotes.Size = new System.Drawing.Size(461, 420);
+            this.listBoxNotes.Size = new System.Drawing.Size(461, 407);
             this.listBoxNotes.TabIndex = 2;
             this.listBoxNotes.DoubleClick += new System.EventHandler(this.listBoxNotes_DoubleClick);
             // 
@@ -311,6 +332,33 @@ namespace Showrunner.UI
             this.textBoxNotepad.Name = "textBoxNotepad";
             this.textBoxNotepad.Size = new System.Drawing.Size(364, 20);
             this.textBoxNotepad.TabIndex = 0;
+            // 
+            // folderContext
+            // 
+            this.folderContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToNewFolderToolStripMenuItem});
+            this.folderContext.Name = "folderContext";
+            this.folderContext.Size = new System.Drawing.Size(174, 26);
+            // 
+            // addToNewFolderToolStripMenuItem
+            // 
+            this.addToNewFolderToolStripMenuItem.Name = "addToNewFolderToolStripMenuItem";
+            this.addToNewFolderToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.addToNewFolderToolStripMenuItem.Text = "Add to New Folder";
+            this.addToNewFolderToolStripMenuItem.Click += new System.EventHandler(this.addToNewFolderToolStripMenuItem_Click);
+            // 
+            // buttonRemoveFromFolder
+            // 
+            this.buttonRemoveFromFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonRemoveFromFolder.Enabled = false;
+            this.buttonRemoveFromFolder.Location = new System.Drawing.Point(235, 478);
+            this.buttonRemoveFromFolder.Name = "buttonRemoveFromFolder";
+            this.buttonRemoveFromFolder.Size = new System.Drawing.Size(232, 23);
+            this.buttonRemoveFromFolder.TabIndex = 5;
+            this.buttonRemoveFromFolder.Text = "Remove from Folder";
+            this.buttonRemoveFromFolder.UseVisualStyleBackColor = true;
+            this.buttonRemoveFromFolder.Click += new System.EventHandler(this.buttonRemoveFromFolder_Click);
             // 
             // FormMain
             // 
@@ -336,6 +384,7 @@ namespace Showrunner.UI
             this.tabControlNotes.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.folderContext.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -365,6 +414,10 @@ namespace Showrunner.UI
         private System.Windows.Forms.ToolStripMenuItem createNewSeasonToolStripMenuItem;
         private System.Windows.Forms.ComboBox seasonBox;
         private System.Windows.Forms.ToolStripMenuItem defaultSeasonToolStripMenuItem;
+        private System.Windows.Forms.ComboBox noteFolderBox;
+        private System.Windows.Forms.ContextMenuStrip folderContext;
+        private System.Windows.Forms.ToolStripMenuItem addToNewFolderToolStripMenuItem;
+        private System.Windows.Forms.Button buttonRemoveFromFolder;
     }
 }
 

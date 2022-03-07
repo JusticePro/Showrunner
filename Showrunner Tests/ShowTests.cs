@@ -295,5 +295,78 @@ namespace Showrunner_Tests
             Assert.AreEqual("newNote", show.getNotes()[0]);
             Assert.AreEqual("newNote2", show.getNotes()[1]);
         }
+
+        /**
+         * Note Folders
+         */
+        [TestMethod]
+        public void getNotesInFolder_addNotesAndGetFolder_returnsListOfNoteNames()
+        {
+            // Setup
+            Show show = new Show();
+
+            show.updateNote("Note1", "n");
+            show.updateNote("Note3", "n2");
+            show.updateNote("Note2", "n3");
+            show.updateNote("Note5", "n255");
+            show.updateNote("Note4", "n344");
+
+            // Act
+            show.addToFolder("Note 5", "Notes");
+            show.addToFolder("Note 5", "Notes"); // Should cancel duplicates.
+            show.addToFolder("Note 4", "Notes");
+
+            // Assert
+            Assert.AreEqual("Note 5", show.getNotesInFolder("Notes")[0]);
+            Assert.AreEqual("Note 4", show.getNotesInFolder("Notes")[1]);
+        }
+
+        [TestMethod]
+        public void addToFolder_removeNoteAndGetFolder_returnsListOfNoteNamesMinusRemovedNote()
+        {
+            // Setup
+            Show show = new Show();
+
+            show.updateNote("Note1", "n");
+            show.updateNote("Note3", "n2");
+            show.updateNote("Note2", "n3");
+            show.updateNote("Note5", "n255");
+            show.updateNote("Note4", "n344");
+
+            show.addToFolder("Note 5", "Notes");
+            show.addToFolder("Note 4", "Notes");
+
+            show.addToFolder("Note 1", "Notes 3");
+
+            // Act
+            show.removeFromFolder("Note 5", "Notes");
+            show.removeFromFolder("Note 1", "Notes 3");
+
+            // Assert
+            Assert.AreEqual("Note 4", show.getNotesInFolder("Notes")[0]);
+            Assert.AreEqual(1, show.getNotesInFolder("Notes").Length);
+
+            Assert.IsTrue(show.getFolders().Length == 1); // Notes 3 doesn't exist.
+        }
+
+        [TestMethod]
+        public void getFolders_addNotesAndGetFolders_returnsListOfFolders()
+        {
+            // Setup
+            Show show = new Show();
+
+            show.updateNote("Note1", "n");
+            show.updateNote("Note3", "n2");
+            show.updateNote("Note2", "n3");
+            show.updateNote("Note5", "n255");
+            show.updateNote("Note4", "n344");
+
+            show.addToFolder("Note 5", "Notes");
+            show.addToFolder("Note 4", "Notes 2");
+
+            // Assert
+            Assert.AreEqual("Notes", show.getFolders()[0]);
+            Assert.AreEqual("Notes 2", show.getFolders()[1]);
+        }
     }
 }

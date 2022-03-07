@@ -17,6 +17,9 @@ namespace Showrunner
         private Dictionary<string, string> notes = new Dictionary<string, string>(); // Title : Contents
         private Dictionary<string, Episode> templates = new Dictionary<string, Episode>(); // Template name. Episode template.
 
+        // Folder - Notes
+        private Dictionary<string, List<string>> noteFolders = new Dictionary<string, List<string>>();
+
         private int versionID = Updater.getVersionID(); // Version ID of the show.
 
         /**
@@ -143,8 +146,69 @@ namespace Showrunner
                 }
             }
 
+            if (noteFolders == null)
+            {
+                noteFolders = new Dictionary<string, List<string>>();
+            }
+
             versionID = Updater.getVersionID();
         }
 
+        /**
+         * Note Folders
+         */
+        public void addToFolder(string note, string folder)
+        {
+            if (!noteFolders.ContainsKey(folder))
+            {
+                noteFolders[folder] = new List<string>();
+            }
+
+            List<string> list = ((List<string>)noteFolders[folder]);
+
+            if (list.Contains(note))
+            {
+                return;
+            }
+
+            list.Add(note);
+        }
+
+        public void removeFromFolder(string note, string folder)
+        {
+            if (!noteFolders.ContainsKey(folder))
+            {
+                return;
+            }
+
+            List<string> list = ((List<string>)noteFolders[folder]);
+
+            if (!list.Contains(note))
+            {
+                return;
+            }
+
+            list.Remove(note);
+            
+            if (list.Count == 0)
+            {
+                noteFolders.Remove(folder);
+            }
+        }
+
+        public string[] getNotesInFolder(string folder)
+        {
+            if (!noteFolders.ContainsKey(folder))
+            {
+                return new string[] { };
+            }
+
+            return noteFolders[folder].ToArray();
+        }
+
+        public string[] getFolders()
+        {
+            return noteFolders.Keys.ToArray();
+        }
     }
 }
