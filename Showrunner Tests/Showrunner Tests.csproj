@@ -52,7 +52,6 @@
   <ItemGroup>
     <Compile Include="EpisodeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ControlNotepadTests.cs" />
     <Compile Include="ShowTests.cs" />
   </ItemGroup>
   <ItemGroup>
