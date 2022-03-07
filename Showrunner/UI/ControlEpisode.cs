@@ -21,9 +21,9 @@ namespace Showrunner.UI
             InitializeComponent();
             this.episode = episode;
 
-            textBoxTitle.Text = episode.title;
+            textBoxTitle.Text = episode.getTitle();
 
-            foreach (string notepad in episode.notes.Keys)
+            foreach (string notepad in episode.getNoteList())
             {
                 listBoxNotes.Items.Add(notepad);
 
@@ -31,7 +31,7 @@ namespace Showrunner.UI
                 //notepads[notepad].textBox.Text = episode.notes[notepad]; // Set the notepad to equal the correct data.
             }
 
-            foreach (string todo in episode.todoLists.Keys)
+            foreach (string todo in episode.getToDoList())
             {
                 listBoxToDo.Items.Add(todo);
 
@@ -106,12 +106,12 @@ namespace Showrunner.UI
         {
             setupNotepad(notepad);
 
-            if (episode.notes[notepad].StartsWith("{\\rtf")) // Check for RTF
+            if (episode.getNote(notepad).StartsWith("{\\rtf")) // Check for RTF
             {
-                notepads[notepad].textBox.Rtf = episode.notes[notepad];
+                notepads[notepad].textBox.Rtf = episode.getNote(notepad);
             }else
             {
-                notepads[notepad].textBox.Text = episode.notes[notepad];
+                notepads[notepad].textBox.Text = episode.getNote(notepad);
             }
         }
 
@@ -121,11 +121,11 @@ namespace Showrunner.UI
         public void openTodo(string todo)
         {
             setupToDo(todo);
-            foreach (string item in episode.todoLists[todo].Keys)
+            foreach (string item in episode.getToDo(todo).Keys)
             {
                 CheckedListBox list = todos[todo].checkBoxList;
                 int index = list.Items.Add(item); // Set the to do list to equal the correct data.
-                list.SetItemChecked(index, episode.todoLists[todo][item]);
+                list.SetItemChecked(index, episode.getToDo(todo)[item]);
             }
         }
 
@@ -133,7 +133,7 @@ namespace Showrunner.UI
         private void textBoxTitle_Leave(object sender, EventArgs e)
         {
             textBoxTitle.Font = new Font(textBoxTitle.Font, FontStyle.Regular);
-            textBoxTitle.Text = episode.title;
+            textBoxTitle.Text = episode.getTitle();
         }
 
         private void textBoxTitle_KeyDown(object sender, KeyEventArgs e)
@@ -141,8 +141,8 @@ namespace Showrunner.UI
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                episode.title = textBoxTitle.Text;
-                Parent.Text = episode.title;
+                episode.setTitle(textBoxTitle.Text);
+                Parent.Text = episode.getTitle();
                 tabControlNotes.Focus();
 
                 FormMain.instance.updateList();
@@ -169,7 +169,7 @@ namespace Showrunner.UI
                 return;
             }
 
-            if (episode.notes.ContainsKey(textBoxNotepad.Text))
+            if (episode.getNoteList().Contains(textBoxNotepad.Text))
             {
                 MessageBox.Show("You already have a notepad with that name.", "Showrunner");
                 return;
@@ -178,7 +178,7 @@ namespace Showrunner.UI
             string notepadName = textBoxNotepad.Text;
             textBoxNotepad.Text = "";
 
-            episode.notes.Add(notepadName, "");
+            episode.updateNote(notepadName, "");
             setupNotepad(notepadName); // Create a new notepad.
             listBoxNotes.Items.Add(notepadName);
 
@@ -192,7 +192,7 @@ namespace Showrunner.UI
                 return;
             }
 
-            if (episode.todoLists.ContainsKey(textBoxToDo.Text))
+            if (episode.getToDoList().Contains(textBoxToDo.Text))
             {
                 MessageBox.Show("You already have a to do list with that name.", "Showrunner");
                 return;
@@ -201,7 +201,7 @@ namespace Showrunner.UI
             string todoName = textBoxToDo.Text;
             textBoxToDo.Text = "";
 
-            episode.todoLists.Add(todoName, new Dictionary<string, bool>());
+            episode.updateToDo(todoName, new Dictionary<string, bool>());
             setupToDo(todoName); // Create a new notepad.
 
             listBoxToDo.Items.Add(todoName);
@@ -221,7 +221,7 @@ namespace Showrunner.UI
             {
                 string name = listBoxNotes.SelectedItem + "";
 
-                episode.notes.Remove(name);
+                episode.removeNote(name);
                 listBoxNotes.Items.Remove(name);
 
                 if (isNoteOpen(name))
@@ -248,7 +248,7 @@ namespace Showrunner.UI
             {
                 string name = listBoxToDo.SelectedItem + "";
 
-                episode.todoLists.Remove(name);
+                episode.removeToDo(name);
                 listBoxToDo.Items.Remove(name);
 
                 TabControl tc = (TabControl)todos[name].Parent.Parent;
@@ -323,13 +323,13 @@ namespace Showrunner.UI
 
                 if (prompt.ShowDialog() == DialogResult.OK)
                 {
-                    if (episode.notes.ContainsKey(prompt.textBox1.Text))
+                    if (episode.getNoteList().Contains(prompt.textBox1.Text))
                     {
                         MessageBox.Show("There's already a note with that name.", "Showrunner");
                         return;
                     }
-                    episode.notes.Add(prompt.textBox1.Text, episode.notes[note]);
-                    episode.notes.Remove(note);
+                    episode.updateNote(prompt.textBox1.Text, episode.getNote(note));
+                    episode.removeNote(note);
                     int index = listBoxNotes.Items.IndexOf(note);
                     listBoxNotes.Items.Remove(note);
                     listBoxNotes.Items.Insert(index, prompt.textBox1.Text);
@@ -371,13 +371,13 @@ namespace Showrunner.UI
 
                 if (prompt.ShowDialog() == DialogResult.OK)
                 {
-                    if (episode.todoLists.ContainsKey(prompt.textBox1.Text))
+                    if (episode.getToDoList().Contains(prompt.textBox1.Text))
                     {
                         MessageBox.Show("There's already a todo list with that name.", "Showrunner");
                         return;
                     }
-                    episode.todoLists.Add(prompt.textBox1.Text, episode.todoLists[todo]);
-                    episode.todoLists.Remove(todo);
+                    episode.updateToDo(prompt.textBox1.Text, episode.getToDo(todo));
+                    episode.removeToDo(todo);
                     int index = listBoxToDo.Items.IndexOf(todo);
                     listBoxToDo.Items.Remove(todo);
                     listBoxToDo.Items.Insert(index, prompt.textBox1.Text);

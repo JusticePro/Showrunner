@@ -9,10 +9,10 @@ using System.Windows.Forms;
 
 namespace Showrunner
 {
-    class Updater
+    public class Updater
     {
-        private static string version = "1.1.2";
-        private static int versionID = 5;
+        private static string version = "1.1.3";
+        private static int versionID = 6;
         
         private static string updateDetailURL =
             "https://raw.githubusercontent.com/JusticePro/Showrunner/master/Showrunner/update_details.txt";

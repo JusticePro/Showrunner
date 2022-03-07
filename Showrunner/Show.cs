@@ -11,107 +11,122 @@ namespace Showrunner
     [Serializable]
     public class Show : Noteable
     {
-        public string title = "Untitled Show";
-        public List<Episode> episodes = new List<Episode>();
+        private string title = "Untitled Show";
+        private List<Episode> episodes = new List<Episode>();
 
-        public Dictionary<string, string> notes = new Dictionary<string, string>(); // Title : Contents
-        public Dictionary<string, Episode> templates = new Dictionary<string, Episode>(); // Template name. Episode template.
+        private Dictionary<string, string> notes = new Dictionary<string, string>(); // Title : Contents
+        private Dictionary<string, Episode> templates = new Dictionary<string, Episode>(); // Template name. Episode template.
 
-        public int versionID = Updater.getVersionID(); // Version ID of the show.
+        private int versionID = Updater.getVersionID(); // Version ID of the show.
 
+        /**
+         * Templates
+         */
+        public string[] getTemplates()
+        {
+            return templates.Keys.ToArray();
+        }
+
+        public void addTemplate(string name, Episode episode)
+        {
+            templates[name] = episode;
+        }
+
+        public Episode getTemplate(string name)
+        {
+            if (!templates.ContainsKey(name))
+            {
+                return null;
+            }
+            return templates[name];
+        }
+
+        /**
+         * Version
+         */
+        public int getVersionID()
+        {
+            return versionID;
+        }
+
+        /**
+         * Title
+         */
+        public string getTitle()
+        {
+            return title;
+        }
+
+        public void setTitle(string title)
+        {
+            this.title = title;
+        }
+
+        /**
+         * Episode
+         */
+        public List<Episode> getEpisodes()
+        {
+            return episodes;
+        }
+
+        public void addEpisode(Episode episode)
+        {
+            episodes.Add(episode);
+        }
+
+        public void removeEpisode(int index)
+        {
+            episodes.RemoveAt(index);
+        }
+
+        public Episode getEpisode(int index)
+        {
+            return episodes[index];
+        }
+
+        public void moveEpisodeUp(int index)
+        {
+            Episode episode = getEpisode(index);
+
+            episodes.RemoveAt(index);
+            episodes.Insert(index - 1, episode);
+        }
+
+        public void moveEpisodeDown(int index)
+        {
+            Episode episode = getEpisode(index);
+
+            episodes.RemoveAt(index);
+            episodes.Insert(index + 1, episode);
+        }
+
+        /**
+         * Notes
+         */
         public void updateNote(string name, string value)
         {
             notes[name] = value;
         }
 
-        
-        /***
-         * Load a show from a file.
-         */
-        public static Show loadShow(string path)
+        public void removeNote(string name)
         {
-            Show show = new Show();
-
-            if (!File.Exists(path))
-            {
-                throw new IOException("File doesn't exist");
-            }
-
-            byte[] data = File.ReadAllBytes(path);
-
-            int pointer = 0; // This represents where the position of the data reading is. After each byte read, this increases.
-
-            /*
-             * Title
-             */
-
-            byte titleLength = data[0]; // Length of the title.
-            pointer++; // Add one byte to the pointer
-
-            string title = Encoding.ASCII.GetString(data, pointer, titleLength); // Read the title.
-            pointer += titleLength; // Move past the title.
-
-            /* Set the show's title. */
-            show.title = title;
-
-            /*
-             * Notes
-             */
-            uint noteCount = BitConverter.ToUInt32(data, pointer); // This amount of notes there are.
-            pointer += 4; // Move past the uInt.
-
-            uint[] noteLengths = new uint[noteCount];
-
-            // Read the uInts that equal to the length of the indiviudal note data.
-            for (int i = 0; i < noteCount; i++)
-            {
-                noteLengths[i] = BitConverter.ToUInt32(data, pointer);
-                pointer += 4; // Move past the uInt.
-            }
-
-            // Read each note.
-            foreach (uint noteLength in noteLengths)
-            {
-                byte[] noteData = data.Skip(pointer).Take((int)noteLength).ToArray();
-
-                byte nameLength = noteData[0];
-                string name = Encoding.ASCII.GetString(noteData, 1, nameLength);
-
-                string contents = Encoding.ASCII.GetString(noteData, 1 + nameLength, noteData.Length - (1 + nameLength));
-
-                /* Add a note */
-                show.notes[name] = contents;
-
-                pointer += (int)noteLength;
-            }
-
-            /*
-             * Episodes
-             */
-            uint episodeCount = BitConverter.ToUInt32(data, pointer); // This amount of notes there are.
-            pointer += 4; // Move past the uInt.
-
-            uint[] episodeLengths = new uint[episodeCount];
-
-            // Read the uInts that equal to the length of the indiviudal episode data.
-            for (int i = 0; i < noteCount; i++)
-            {
-                noteLengths[i] = BitConverter.ToUInt32(data, pointer);
-                pointer += 4; // Move past the uInt.
-            }
-
-            foreach (uint episodeLength in episodeLengths)
-            {
-                byte[] episodeData = data.Skip(pointer).Take((int)episodeLength).ToArray();
-
-                /* Add an episode. */
-                show.episodes.Add(Episode.readEpisode(episodeData));
-                pointer += (int)episodeLength;
-            }
-
-            return show;
+            notes.Remove(name);
         }
 
+        public string getNote(string name)
+        {
+            return notes[name];
+        }
+
+        public string[] getNotes()
+        {
+            return notes.Keys.ToArray();
+        }
+
+        /**
+         * Update
+         */
         public void update()
         {
             if (templates == null) // Templates
@@ -122,94 +137,13 @@ namespace Showrunner
             foreach (Episode episode in episodes)
             {
                 // Update season if there isn't one.
-                if (episode.season == null)
+                if (episode.getSeason() == null)
                 {
-                    episode.season = "Default Season";
+                    episode.setSeason("Default Season");
                 }
             }
 
             versionID = Updater.getVersionID();
-        }
-
-        public void saveShow(string path)
-        {
-            List<byte> data = new List<byte>();
-            
-            /**
-             * Title
-             */
-
-            byte[] t = Encoding.ASCII.GetBytes(title); // Title to bytes.
-            byte titleLength = (byte) t.Length; // Title length
-
-            data.Add(titleLength); // Add title headers (length)
-            data.AddRange(t); // Add title
-
-            /**
-             * Notes
-             */
-
-            uint noteCount = (uint) notes.Count; // Note Count
-
-            data.AddRange(BitConverter.GetBytes(noteCount)); // Add Note Count
-
-            List<uint> noteLengths = new List<uint>();
-            List<byte[]> noteData = new List<byte[]>();
-
-            // For each note
-            foreach (string note in notes.Keys)
-            {
-                byte[] nd = Encoding.ASCII.GetBytes(notes[note]); // Note Data
-                byte[] noteTitle = Encoding.ASCII.GetBytes(notes[note]);
-                List<byte> ndata = new List<byte>(); // Note Data + Name
-
-                ndata.Add((byte)noteTitle.Length);
-                ndata.AddRange(noteTitle);
-                ndata.AddRange(nd);
-
-                noteLengths.Add((uint)ndata.ToArray().Length);
-                noteData.Add(ndata.ToArray());
-            }
-
-            foreach (uint nl in noteLengths)
-            {
-                data.AddRange(BitConverter.GetBytes(nl)); // Add Note Length
-            }
-
-            foreach (byte[] nd in noteData)
-            {
-                data.AddRange(nd); // Add Note Contents
-            }
-
-            /**
-             * Episode
-             */
-            List<uint> episodeLengths = new List<uint>();
-            List<byte[]> episodeData = new List<byte[]>();
-
-            // For each note
-            foreach (Episode episode in episodes)
-            {
-                byte[] ed = episode.toBytes();
-                episodeLengths.Add((uint)ed.Length);
-                episodeData.Add(ed);
-            }
-
-            foreach (uint el in episodeLengths)
-            {
-                data.AddRange(BitConverter.GetBytes(el)); // Add Note Length
-            }
-
-            foreach (byte[] ed in noteData)
-            {
-                data.AddRange(ed); // Add Note Contents
-            }
-
-            /**
-             * Write File
-             */
-
-            File.WriteAllBytes(path, data.ToArray()); // Write data.
         }
 
     }
