@@ -52,7 +52,7 @@ namespace Showrunner.UI
                 string name = prompt.textBox1.Text;
 
                 Show show = new Show();
-                show.title = name;
+                show.setTitle(name);
 
                 FormMain formMain = new FormMain(show);
                 formMain.Show();

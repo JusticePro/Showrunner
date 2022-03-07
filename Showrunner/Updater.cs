@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Showrunner
 {
-    class Updater
+    public class Updater
     {
         private static string version = "1.1.3";
         private static int versionID = 6;
